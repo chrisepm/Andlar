@@ -1,0 +1,20 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <button mat-icon-button>
+      <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+    </button>
+    <h1>Andlar</h1>
+    <span class="menu-spacer"></span>
+    <div>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav #sidenav opened="true" mode="side" class="sidenav">
+    <app-authors></app-authors>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <app-publications></app-publications>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

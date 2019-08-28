@@ -1,0 +1,21 @@
+<mat-nav-list>
+  <h3 class="title">Authors:</h3>
+  <mat-divider></mat-divider>
+  <div class="menu-item">
+    <a mat-button
+       class="a-item"
+       fxLayout="row"
+       fxLayoutAlign="'center center'"
+       (click)="onClick(author.id)" *ngFor="let author of authors">
+      <mat-icon class="menu-icon">account_circle</mat-icon>
+      <span class="menu-title">{{author.name}}</span>
+    </a>
+  </div>
+  <mat-card *ngIf="!loading"
+            style="display: flex; justify-content: center; align-items: center; background-color: transparent;">
+    <mat-progress-spinner
+      color="primary"
+      mode="indeterminate">
+    </mat-progress-spinner>
+  </mat-card>
+</mat-nav-list>
