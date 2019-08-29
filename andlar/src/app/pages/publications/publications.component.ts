@@ -33,6 +33,7 @@ export class PublicationsComponent implements OnInit {
         this.loading = true;
         this.publicationService.getPublicationByAuthorId(params.id).subscribe(result => {
           this.loading = false;
+          this.publications = result.data;
           this.dataSource = new MatTableDataSource<IPublication>(result.data);
           this.dataSource.paginator = this.paginator;
         }, (err) => {
