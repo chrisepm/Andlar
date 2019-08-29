@@ -6,6 +6,9 @@
        class="a-item"
        fxLayout="row"
        fxLayoutAlign="'center center'"
+       routerLinkActive="active-link"
+       [routerLink]="['/author/' + author.id]"
+       [routerLinkActiveOptions]="{exact:true}"
        (click)="onClick(author.id)" *ngFor="let author of authors">
       <mat-icon class="menu-icon">account_circle</mat-icon>
       <span class="menu-title">{{author.name}}</span>

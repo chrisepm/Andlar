@@ -22,6 +22,12 @@ export class PublicationsService {
     });
   }
 
+  getPublicationsByTitle(title: string): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/publication/filter`, {
+      title: title
+    });
+  }
+
   addPublication(publication: IPublication) {
     return this.http.post<any>(`${environment.apiUrl}/publication`, publication);
   }
