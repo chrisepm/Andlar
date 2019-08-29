@@ -33,8 +33,8 @@ export class PublicationsComponent implements OnInit {
         this.loading = true;
         this.publicationService.getPublicationByAuthorId(params.id).subscribe(result => {
           this.loading = false;
-          this.publications = result.data;
-          this.dataSource = new MatTableDataSource<IPublication>(result.data);
+          this.publications = result.data.sort(this.dynamicSort('-date'));
+          this.dataSource = new MatTableDataSource<IPublication>(this.publications);
           this.dataSource.paginator = this.paginator;
         }, (err) => {
           this.loading = false;
@@ -44,8 +44,8 @@ export class PublicationsComponent implements OnInit {
         this.loading = true;
         this.publicationService.getPublications().subscribe(result => {
           this.loading = false;
-          this.publications = result.data;
-          this.dataSource = new MatTableDataSource<IPublication>(result.data);
+          this.publications = result.data.sort(this.dynamicSort('-date'));
+          this.dataSource = new MatTableDataSource<IPublication>(this.publications);
           this.dataSource.paginator = this.paginator;
         }, (err) => {
           this.loading = false;
@@ -82,6 +82,18 @@ export class PublicationsComponent implements OnInit {
 
   private compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  private dynamicSort(property) {
+    let sortOrder = 1;
+    if (property[0] === '-') {
+      sortOrder = -1;
+      property = property.substr(1);
+    }
+    return function (a, b) {
+      const result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+      return result * sortOrder;
+    };
   }
 
 }
