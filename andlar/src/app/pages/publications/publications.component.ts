@@ -1,14 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { IPublication } from '@app/interfaces';
-import { PublicationsService } from '@app/publications/publications.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
+import { ActivatedRoute } from "@angular/router";
+import { PublicationsService } from "@app/pages/publications/publications.service";
 
 @Component({
   selector: 'app-publications',
   templateUrl: './publications.component.html',
-  styleUrls: ['./publications.component.sass']
+  styleUrls: ['./publications.component.sass'],
+  providers: [ PublicationsService ]
 })
 export class PublicationsComponent implements OnInit {
 
@@ -21,19 +23,35 @@ export class PublicationsComponent implements OnInit {
   public sortedData: IPublication[];
   public loading = false;
 
-  constructor(private publicationService: PublicationsService) { }
+  constructor(private publicationService: PublicationsService, private route: ActivatedRoute) {
+  }
 
   ngOnInit() {
-    this.loading = true;
-    this.publicationService.getPublications().subscribe(result => {
-      this.loading = false;
-      this.publications = result.data;
-      this.dataSource = new MatTableDataSource<IPublication>(result.data);
-      this.dataSource.paginator = this.paginator;
-    }, (err) => {
-      this.loading = false;
-      console.log(err);
-    });
+    this.route.params.subscribe((params) => {
+      if (params.id && params.id !== '0') {
+        this.dataSource = new MatTableDataSource<IPublication>([]);
+        this.loading = true;
+        this.publicationService.getPublicationByAuthorId(params.id).subscribe(result => {
+          this.loading = false;
+          this.dataSource = new MatTableDataSource<IPublication>(result.data);
+          this.dataSource.paginator = this.paginator;
+        }, (err) => {
+          this.loading = false;
+          console.log(err);
+        });
+      } else {
+        this.loading = true;
+        this.publicationService.getPublications().subscribe(result => {
+          this.loading = false;
+          this.publications = result.data;
+          this.dataSource = new MatTableDataSource<IPublication>(result.data);
+          this.dataSource.paginator = this.paginator;
+        }, (err) => {
+          this.loading = false;
+          console.log(err);
+        });
+      }
+    })
   }
 
   applyFilter(filterValue: string) {
